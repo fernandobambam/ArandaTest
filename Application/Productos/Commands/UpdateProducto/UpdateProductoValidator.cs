@@ -13,13 +13,13 @@ namespace Application.Productos.Commands.UpdateProducto
         {
             RuleFor(producto => producto.Nombre)
                 .NotNull()
-                .MaximumLength(100);
+                .MaximumLength(50);
 
             RuleFor(producto => producto.Descripcion)
-                .MaximumLength(200);
+                .MaximumLength(150);
 
             RuleFor(producto => producto.Categoria)
-                .MaximumLength(100);
+                .MaximumLength(50);
         }
 
     }
