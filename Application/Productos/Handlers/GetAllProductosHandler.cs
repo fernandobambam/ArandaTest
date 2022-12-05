@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
-using Application.Productos.Queries;
+using Application.Productos.Queries.GetAllProductos;
+using AutoMapper;
 using Domain.Common;
 using Domain.Entities;
 using Domain.Options;
@@ -13,20 +14,22 @@ using System.Threading.Tasks;
 
 namespace Application.Productos.Handlers
 {
-    public class GetAllProductosHandler : IRequestHandler<GetAllProductosQuery, PagedList<Producto>>
+    public class GetAllProductosHandler : IRequestHandler<GetAllProductosQuery, PagedList<ProductoDto>>
     {
         private readonly IArandaContext _arandaContext;
+        private readonly IMapper _mapper; 
         private readonly FiltersOptions _paginationOptions; 
 
 
-        public GetAllProductosHandler(IArandaContext arandaContext, IOptions<FiltersOptions> options)
+        public GetAllProductosHandler(IArandaContext arandaContext, IMapper mapper, IOptions<FiltersOptions> options)
         {
             _arandaContext = arandaContext;
+            _mapper = mapper;
             _paginationOptions = options.Value;
         }
 
 
-        public Task<PagedList<Producto>> Handle(GetAllProductosQuery request, CancellationToken cancellationToken)
+        public Task<PagedList<ProductoDto>> Handle(GetAllProductosQuery request, CancellationToken cancellationToken)
         {
             request.PageNumber = request.PageNumber == 0 ? _paginationOptions.DefaultPageNumber : request.PageNumber; 
             request.PageSize = request.PageSize == 0 ? _paginationOptions.DefaultPageSize : request.PageSize;
@@ -57,7 +60,9 @@ namespace Application.Productos.Handlers
                 listProducto = listProducto.OrderBy(x => x.Nombre).ThenBy(x => x.Categoria);
             }
 
-            var pagedPost = PagedList<Producto>.Create(listProducto, request.PageNumber, request.PageSize);
+            var listProductoDto = _mapper.Map<IEnumerable<ProductoDto>>(listProducto.ToList());
+
+            var pagedPost = PagedList<ProductoDto>.Create(listProductoDto, request.PageNumber, request.PageSize);
 
             return Task.FromResult(pagedPost);
         }

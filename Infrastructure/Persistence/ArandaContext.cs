@@ -26,14 +26,14 @@ public partial class ArandaContext : DbContext, IArandaContext
             entity.HasKey(e => e.IdProducto).HasName("PK_Producto");
 
             entity.Property(e => e.Categoria)
-                .HasMaxLength(100)
+                .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(200)
+                .HasMaxLength(150)
                 .IsUnicode(false);
             entity.Property(e => e.Imagen).IsUnicode(false);
             entity.Property(e => e.Nombre)
-                .HasMaxLength(100)
+                .HasMaxLength(50)
                 .IsUnicode(false);
         });
 

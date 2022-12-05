@@ -26,7 +26,7 @@ namespace Application.Productos.Handlers
 
             if (entity == null)
             {
-                throw new BusinessException("No existe producto con ese Id");
+                throw new NotFoundException("No existe producto con ese Id");
             }
 
             entity.Nombre = request.Nombre;

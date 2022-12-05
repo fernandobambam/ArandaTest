@@ -29,6 +29,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("Aranda")));
 builder.Services.Configure<FiltersOptions>(builder.Configuration.GetSection("DefaultFilters"));
 
 builder.Services.AddTransient<IArandaContext, ArandaContext>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<IUriService>(provider =>
 {
     var accesor = provider.GetRequiredService<IHttpContextAccessor>();

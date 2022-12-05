@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Productos.Queries
+namespace Application.Productos.Queries.GetAllProductos
 {
-    public class GetAllProductosQuery : IRequest<PagedList<Producto>>
+    public class GetAllProductosQuery : IRequest<PagedList<ProductoDto>>
     {
         public string? Nombre { get; set; }
         public string? Descripcion { get; set; }

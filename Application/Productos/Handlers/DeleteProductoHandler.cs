@@ -25,7 +25,7 @@ namespace Application.Productos.Handlers
 
             if(entity == null)
             {
-                throw new BusinessException("No existe ese producto");
+                throw new NotFoundException("No existe ese producto");
             }
 
             _arandaContext.Productos.Remove(entity);

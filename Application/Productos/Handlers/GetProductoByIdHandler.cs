@@ -1,36 +1,37 @@
 ﻿using Application.Interfaces;
-using Application.Productos.Queries;
+using Application.Productos.Queries.GetAllProductos;
+using Application.Productos.Queries.GetProductoById;
+using AutoMapper;
 using Domain.Entities;
 using Domain.Exceptions;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Productos.Handlers
 {
-    public class GetProductoByIdHandler : IRequestHandler<GetProductoByIdQuery, Producto>
+    public class GetProductoByIdHandler : IRequestHandler<GetProductoByIdQuery, ProductoDto>
     {
-        private readonly IArandaContext _arandaContext; 
+        private readonly IArandaContext _arandaContext;
+        private readonly IMapper _mapper;
 
 
-        public GetProductoByIdHandler(IArandaContext arandaContext)
+        public GetProductoByIdHandler(IArandaContext arandaContext, IMapper mapper)
         {
-            _arandaContext = arandaContext; 
+            _arandaContext = arandaContext;
+            _mapper = mapper; 
         }
 
-        public Task<Producto> Handle(GetProductoByIdQuery request, CancellationToken cancellationToken)
+        public Task<ProductoDto> Handle(GetProductoByIdQuery request, CancellationToken cancellationToken)
         {
             var entity = _arandaContext.Productos.Where(x => x.IdProducto == request.IdProducto).FirstOrDefault();
 
             if(entity == null)
             {
-                throw new BusinessException("No se encontró ese producto");
+                throw new NotFoundException("No se encontró ese producto");
             }
 
-            return Task.FromResult(entity); 
+            var productoDto = _mapper.Map<ProductoDto>(entity);
+
+            return Task.FromResult(productoDto); 
         }
     }
 }

@@ -3,11 +3,10 @@ using Application.Common.Interfaces;
 using Application.Productos.Commands.CreateProducto;
 using Application.Productos.Commands.DeleteProducto;
 using Application.Productos.Commands.UpdateProducto;
-using Application.Productos.Queries;
+using Application.Productos.Queries.GetAllProductos;
+using Application.Productos.Queries.GetProductoById;
 using Domain.Common;
-using Domain.Entities;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -30,7 +29,7 @@ namespace Api.Controllers
         public async Task<ActionResult> Get([FromQuery] GetAllProductosQuery query)
         {
             var productos = await _mediator.Send(query);
-
+    
             var metadata = new Metadata()
             {
                 TotalCount = productos.TotalCount,
@@ -43,7 +42,7 @@ namespace Api.Controllers
                 PreviousPageUrl = productos.HasPreviousPage ? _uriService.GetAllProductos(query.PageSize, query.PageNumber - 1, query.Descendant, Url.RouteUrl(nameof(Get))).ToString() : string.Empty
             };
 
-            var response = new ApiResponse<PagedList<Producto>>(productos)
+            var response = new ApiResponse<PagedList<ProductoDto>>(productos)
             {
                 Meta = metadata
             };
